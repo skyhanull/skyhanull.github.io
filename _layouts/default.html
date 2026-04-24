@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: 'ko-KR' }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% seo %}
+    {% feed_meta %}
+    {% if site.google_site_verification and site.google_site_verification != "" %}
+      <meta name="google-site-verification" content="{{ site.google_site_verification }}">
+    {% endif %}
+    <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+    {% include gtm-head.html %}
+  </head>
+  <body>
+    {% include gtm-body.html %}
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+        <nav class="site-nav" aria-label="Primary navigation">
+          {% for item in site.nav %}
+            <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+          {% endfor %}
+        </nav>
+      </header>
+
+      <main class="page-content">
+        {{ content }}
+      </main>
+
+      <footer class="site-footer">
+        <p>{{ site.title }} © {{ 'now' | date: '%Y' }}</p>
+        <p>Built with Jekyll for GitHub Pages.</p>
+      </footer>
+    </div>
+  </body>
+</html>

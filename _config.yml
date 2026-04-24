@@ -1,0 +1,50 @@
+title: An's Archive
+email: hello@example.com
+description: "기록하고 정리하고 공유하는 개인 블로그"
+baseurl: ""
+url: "https://your-github-username.github.io"
+lang: ko-KR
+timezone: Asia/Seoul
+
+author:
+  name: An
+  twitter:
+  picture:
+
+markdown: kramdown
+theme:
+permalink: /:categories/:title/
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+  - scope:
+      path: ""
+    values:
+      layout: default
+
+gtm_id: "GTM-XXXXXXX"
+google_site_verification: ""
+nav:
+  - title: Home
+    url: /
+  - title: About
+    url: /about/
+
+social:
+  name: An
+  links:
+    - https://github.com/your-github-username
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
