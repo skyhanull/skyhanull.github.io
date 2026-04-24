@@ -1,13 +1,13 @@
-title: An's Archive
-email: hello@example.com
+title: yoonlog
+email: ank04250425@gmail.com
 description: "기록하고 정리하고 공유하는 개인 블로그"
 baseurl: ""
-url: "https://your-github-username.github.io"
+url: "https://skyhanull.github.io"
 lang: ko-KR
 timezone: Asia/Seoul
 
 author:
-  name: An
+  name: yoon
   twitter:
   picture:
 
@@ -31,7 +31,7 @@ defaults:
     values:
       layout: default
 
-gtm_id: "GTM-XXXXXXX"
+gtm_id: ""
 google_site_verification: ""
 nav:
   - title: Home
@@ -40,9 +40,9 @@ nav:
     url: /about/
 
 social:
-  name: An
+  name: yoon
   links:
-    - https://github.com/your-github-username
+    - https://github.com/skyhanull
 
 exclude:
   - README.md
