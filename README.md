@@ -15,10 +15,26 @@ GitHub Pages 최신 의존성 기준으로 로컬 실행에는 Ruby 3.3 이상�
 
 ```bash
 bundle install
-bundle exec jekyll serve
+bundle exec jekyll serve --livereload --force_polling
 ```
 
 브라우저에서 `http://127.0.0.1:4000` 으로 확인할 수 있습니다.
+
+### 옵션 설명
+
+- `--livereload` : 파일을 저장하면 브라우저가 자동으로 새로고침됩니다.
+- `--force_polling` : 폴더 경로에 한글이 포함된 경우(macOS fsnotify 미감지 이슈) 변경 감지를 폴링으로 강제합니다.
+
+### 한글 카테고리/permalink를 쓸 때 (필수)
+
+쉘 로케일이 `C` 면 한글 permalink 빌드 시 인코딩 에러가 납니다. `~/.zshrc` (또는 `~/.bash_profile`)에 다음을 추가하세요:
+
+```bash
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+```
+
+추가 후 `source ~/.zshrc` 또는 새 터미널을 여세요.
 
 ## 배포
 

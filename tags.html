@@ -1,0 +1,31 @@
+---
+layout: default
+title: 태그
+description: 태그별 글 모음
+permalink: /tags/
+---
+
+<section class="archive-page">
+  <header class="archive-header">
+    <p class="eyebrow">Tags</p>
+    <h1>태그</h1>
+    <p class="archive-copy">태그로 더 좁혀서 글을 찾아봅니다.</p>
+  </header>
+
+  {% assign sorted_tags = site.tags | sort %}
+  {% for tag in sorted_tags %}
+    <section class="archive-group" id="{{ tag[0] }}">
+      <h2 class="archive-group-title">#{{ tag[0] }} <span>{{ tag[1] | size }}</span></h2>
+      <ul class="archive-list">
+        {% for post in tag[1] %}
+          <li>
+            <a href="{{ post.url | relative_url }}">
+              <span class="archive-date">{{ post.date | date: "%Y.%m.%d" }}</span>
+              <span class="archive-title">{{ post.title }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endfor %}
+</section>

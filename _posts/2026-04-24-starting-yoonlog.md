@@ -2,6 +2,7 @@
 title: "yoonlog를 시작하며"
 date: 2026-04-24 19:10:00 +0900
 description: yoonlog를 처음 열면서 남기는 첫 기록.
+category: 일상
 tags:
   - start
   - blog

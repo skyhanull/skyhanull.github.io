@@ -1,0 +1,90 @@
+---
+layout: default
+---
+<section class="archive-page">
+  <header class="archive-header">
+    <p class="archive-eyebrow">CATEGORY</p>
+    <h1>{{ page.title }}</h1>
+    <p class="archive-copy">{{ page.title }} 카테고리에 등록된 글입니다.</p>
+  </header>
+
+  {% assign filtered = site.posts | where: 'category', page.category_name %}
+
+  {% if page.tag_filters and page.tag_filters.size > 0 %}
+    <div class="tag-filter" role="tablist" aria-label="태그 필터">
+      <button type="button" class="tag-chip is-active" data-tag="all" role="tab" aria-selected="true">전체 ({{ filtered.size }})</button>
+      {% for tag in page.tag_filters %}
+        {% assign tag_count = filtered | where_exp: "p", "p.tags contains tag" | size %}
+        <button type="button" class="tag-chip" data-tag="{{ tag }}" role="tab" aria-selected="false">{{ tag }} ({{ tag_count }})</button>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <section class="article-list" data-filterable>
+    {% for post in filtered %}
+      <article class="article-item" data-tags="{{ post.tags | join: ',' }}">
+        <div class="article-meta">
+          <span class="article-category">{{ post.category }}</span>
+          <span class="article-dot">•</span>
+          <span class="article-date">{{ post.date | date: "%B %d, %Y" }}</span>
+          {% if post.content %}
+            {% assign words = post.content | number_of_words %}
+            {% assign read_time = words | divided_by: 200 | plus: 1 %}
+            <span class="article-dot">•</span>
+            <span class="article-readtime">{{ read_time }} min read</span>
+          {% endif %}
+          {% if post.tags and post.tags.size > 0 %}
+            {% for tag in post.tags %}
+              <span class="article-tag-pill">#{{ tag }}</span>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <h2 class="article-title">
+          <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        </h2>
+        {% if post.description %}
+          <p class="article-excerpt">{{ post.description }}</p>
+        {% else %}
+          <p class="article-excerpt">{{ post.content | strip_html | truncate: 160 }}</p>
+        {% endif %}
+        <div class="article-author">
+          <span class="article-author-avatar" aria-hidden="true">{{ site.author.name | default: site.title | slice: 0, 1 | upcase }}</span>
+          <span class="article-author-name">{{ site.author.name | default: site.title }}</span>
+        </div>
+      </article>
+    {% endfor %}
+  </section>
+
+  {% if filtered.size == 0 %}
+    <p class="empty-state">이 카테고리에는 아직 글이 없습니다.</p>
+  {% endif %}
+  <p class="empty-state filter-empty" hidden>해당 태그의 글이 없습니다.</p>
+</section>
+
+{% if page.tag_filters and page.tag_filters.size > 0 %}
+  <script>
+    (function () {
+      const chips = document.querySelectorAll('.tag-chip');
+      const list = document.querySelector('[data-filterable]');
+      const empty = document.querySelector('.filter-empty');
+      if (!chips.length || !list) return;
+      chips.forEach((chip) => {
+        chip.addEventListener('click', () => {
+          const tag = chip.dataset.tag;
+          chips.forEach((c) => {
+            c.classList.toggle('is-active', c === chip);
+            c.setAttribute('aria-selected', c === chip ? 'true' : 'false');
+          });
+          let visible = 0;
+          list.querySelectorAll('.article-item').forEach((item) => {
+            const tags = (item.dataset.tags || '').split(',').filter(Boolean);
+            const show = tag === 'all' || tags.includes(tag);
+            item.style.display = show ? '' : 'none';
+            if (show) visible++;
+          });
+          if (empty) empty.hidden = visible > 0;
+        });
+      });
+    })();
+  </script>
+{% endif %}

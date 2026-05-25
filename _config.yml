@@ -13,7 +13,7 @@ author:
 
 markdown: kramdown
 theme:
-permalink: /:categories/:title/
+permalink: /:year/:month/:day/:title/
 
 plugins:
   - jekyll-feed
@@ -36,6 +36,10 @@ google_site_verification: ""
 nav:
   - title: Home
     url: /
+  - title: Categories
+    url: /categories/
+  - title: Tags
+    url: /tags/
   - title: About
     url: /about/
 

@@ -2,7 +2,9 @@
 title: "블로그를 시작합니다"
 date: 2026-04-24 18:40:00 +0900
 description: GitHub Pages와 Jekyll로 개인 블로그를 연 첫 글입니다.
+category: 개발
 tags:
+  - 프론트
   - blog
   - jekyll
   - github-pages

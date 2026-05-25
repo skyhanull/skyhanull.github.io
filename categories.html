@@ -1,0 +1,39 @@
+---
+layout: default
+title: 카테고리
+description: 카테고리별 글 모음
+permalink: /categories/
+---
+
+{%- assign all_categories = '' | split: ',' -%}
+{%- for post in site.posts -%}
+  {%- if post.category -%}
+    {%- assign all_categories = all_categories | push: post.category -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign unique_categories = all_categories | uniq | sort -%}
+
+<section class="archive-page">
+  <header class="archive-header">
+    <p class="eyebrow">Categories</p>
+    <h1>카테고리</h1>
+    <p class="archive-copy">주제별로 글을 모아 봅니다.</p>
+  </header>
+
+  {% for cat in unique_categories %}
+    {% assign cat_posts = site.posts | where: 'category', cat %}
+    <section class="archive-group" id="{{ cat }}">
+      <h2 class="archive-group-title">{{ cat }} <span>{{ cat_posts | size }}</span></h2>
+      <ul class="archive-list">
+        {% for post in cat_posts %}
+          <li>
+            <a href="{{ post.url | relative_url }}">
+              <span class="archive-date">{{ post.date | date: "%Y.%m.%d" }}</span>
+              <span class="archive-title">{{ post.title }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endfor %}
+</section>

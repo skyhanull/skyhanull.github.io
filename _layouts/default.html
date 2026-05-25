@@ -8,29 +8,155 @@
     {% if site.google_site_verification and site.google_site_verification != "" %}
       <meta name="google-site-verification" content="{{ site.google_site_verification }}">
     {% endif %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
     {% include gtm-head.html %}
   </head>
   <body>
     {% include gtm-body.html %}
-    <div class="site-shell">
-      <header class="site-header">
-        <a class="brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
-        <nav class="site-nav" aria-label="Primary navigation">
-          {% for item in site.nav %}
-            <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
-          {% endfor %}
-        </nav>
-      </header>
 
-      <main class="page-content">
-        {{ content }}
-      </main>
+    <header class="top-nav">
+      <div class="top-nav-inner">
+        <div class="top-nav-left">
+          <a class="brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+          <nav class="top-nav-menu" aria-label="Primary navigation">
+            {% for item in site.nav %}
+              <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+            {% endfor %}
+          </nav>
+        </div>
+        <div class="top-nav-right">
+          <a class="subscribe-btn" href="{{ '/feed.xml' | relative_url }}">Subscribe</a>
+        </div>
+      </div>
+    </header>
 
-      <footer class="site-footer">
-        <p>{{ site.title }} © {{ 'now' | date: '%Y' }}</p>
-        <p>Built with Jekyll for GitHub Pages.</p>
-      </footer>
+    {% if page.url == '/' %}
+      <section class="hero-banner">
+        <div class="hero-banner-gradient"></div>
+        <div class="bubble-field" aria-hidden="true"></div>
+        <div class="hero-banner-content">
+          <h1 class="hero-banner-title">{{ site.title }}</h1>
+          <p class="hero-banner-subtitle">{{ site.description }}</p>
+        </div>
+      </section>
+      <script>
+        (function () {
+          const field = document.querySelector('.bubble-field');
+          if (!field) return;
+          const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (reduceMotion) return;
+
+          function spawn() {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'bubble';
+            b.setAttribute('aria-label', 'pop bubble');
+            const size = 14 + Math.random() * 44;
+            const left = Math.random() * 96 + 2;
+            const duration = 6 + Math.random() * 5;
+            const drift = (Math.random() - 0.5) * 90;
+            const delay = Math.random() * 0.6;
+            b.style.width = b.style.height = size + 'px';
+            b.style.left = left + '%';
+            b.style.setProperty('--drift', drift + 'px');
+            b.style.animationDuration = duration + 's';
+            b.style.animationDelay = delay + 's';
+            b.addEventListener('click', () => {
+              if (b.dataset.popped) return;
+              b.dataset.popped = '1';
+              const rect = b.getBoundingClientRect();
+              const fieldRect = field.getBoundingClientRect();
+              const cx = rect.left - fieldRect.left + rect.width / 2;
+              const cy = rect.top - fieldRect.top + rect.height / 2;
+              const baseSize = rect.width;
+              const frozenMatrix = getComputedStyle(b).transform;
+              b.style.animation = 'none';
+              b.style.transform = frozenMatrix;
+              void b.offsetWidth;
+              b.style.transition = 'transform 320ms ease-out, opacity 320ms ease-out';
+              requestAnimationFrame(() => {
+                b.style.transform = frozenMatrix + ' scale(1.4)';
+                b.style.opacity = '0';
+              });
+              const count = 7 + Math.floor(Math.random() * 3);
+              for (let i = 0; i < count; i++) {
+                const s = document.createElement('span');
+                s.className = 'bubble-shard';
+                const angle = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
+                const distance = baseSize * 0.7 + Math.random() * 24;
+                const dropSize = Math.max(3, baseSize * 0.12 + Math.random() * 4);
+                s.style.width = s.style.height = dropSize + 'px';
+                s.style.left = cx + 'px';
+                s.style.top = cy + 'px';
+                s.style.setProperty('--dx', Math.cos(angle) * distance + 'px');
+                s.style.setProperty('--dy', Math.sin(angle) * distance + 'px');
+                s.style.animationDelay = (i * 8) + 'ms';
+                field.appendChild(s);
+                setTimeout(() => s.remove(), 700);
+              }
+              [0, 140].forEach((rd) => {
+                const ring = document.createElement('span');
+                ring.className = 'bubble-ring';
+                ring.style.left = cx + 'px';
+                ring.style.top = cy + 'px';
+                ring.style.width = ring.style.height = baseSize + 'px';
+                ring.style.animationDelay = rd + 'ms';
+                field.appendChild(ring);
+                setTimeout(() => ring.remove(), 900 + rd);
+              });
+              setTimeout(() => b.remove(), 340);
+            });
+            b.addEventListener('animationend', (e) => {
+              if (e.animationName === 'bubbleRise') b.remove();
+            });
+            field.appendChild(b);
+          }
+
+          for (let i = 0; i < 6; i++) setTimeout(spawn, i * 350);
+          let timer = setInterval(spawn, 900);
+
+          document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+              clearInterval(timer);
+            } else {
+              timer = setInterval(spawn, 900);
+            }
+          });
+        })();
+      </script>
+    {% endif %}
+
+    <div class="page-wrap">
+      <div class="page-grid">
+        {% include sidebar.html %}
+        <main class="page-content">
+          {{ content }}
+        </main>
+      </div>
     </div>
+
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <div class="site-footer-brand">
+          <p class="site-footer-name">{{ site.title }}</p>
+          <p class="site-footer-copy">© {{ 'now' | date: '%Y' }} {{ site.title }}. Quietly publishing from Seoul.</p>
+        </div>
+        <nav class="site-footer-nav" aria-label="Footer">
+          <a href="{{ '/feed.xml' | relative_url }}">RSS Feed</a>
+          <a href="{{ '/categories/' | relative_url }}">Categories</a>
+          <a href="{{ '/tags/' | relative_url }}">Tags</a>
+          {% if site.social.links %}
+            {% for link in site.social.links %}
+              <a href="{{ link }}" target="_blank" rel="noopener">
+                {% if link contains 'github' %}GitHub{% elsif link contains 'twitter' %}Twitter{% else %}Link{% endif %}
+              </a>
+            {% endfor %}
+          {% endif %}
+        </nav>
+      </div>
+    </footer>
   </body>
 </html>
