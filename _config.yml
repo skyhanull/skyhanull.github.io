@@ -52,3 +52,10 @@ exclude:
   - README.md
   - Gemfile
   - Gemfile.lock
+  - vendor
+  - node_modules
+  - package.json
+  - package-lock.json
+  - scripts
+  - .github
+  - .omc
