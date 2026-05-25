@@ -48,35 +48,37 @@ function getSelectValue(prop) {
   if (!prop) return null;
   if (prop.type === "select") return prop.select?.name || null;
   if (prop.type === "status") return prop.status?.name || null;
+  if (prop.type === "multi_select") return prop.multi_select?.[0]?.name || null;
   return null;
+}
+
+function normalizeKey(k) {
+  return String(k || "").trim().toLowerCase().replace(/\s+/g, "");
+}
+
+function findPropByName(props, candidates) {
+  const wanted = new Set(candidates.map(normalizeKey));
+  for (const key of Object.keys(props)) {
+    if (wanted.has(normalizeKey(key))) return { key, prop: props[key] };
+  }
+  return { key: null, prop: null };
 }
 
 function getStatus(props) {
-  const candidates = ["상태", "Status", "status"];
-  for (const k of candidates) {
-    const v = getSelectValue(props[k]);
-    if (v) return v;
-  }
-  return null;
+  const { prop } = findPropByName(props, ["상태", "Status", "status", "스테이터스"]);
+  return getSelectValue(prop);
 }
 
 function getCategory(props) {
-  const candidates = ["카테고리", "Category", "category"];
-  for (const k of candidates) {
-    const v = getSelectValue(props[k]);
-    if (v) return v;
-  }
-  return null;
+  const { prop } = findPropByName(props, ["카테고리", "Category", "category", "분류"]);
+  return getSelectValue(prop);
 }
 
 function getTags(props) {
-  const candidates = ["태그", "Tags", "tags"];
-  for (const k of candidates) {
-    const p = props[k];
-    if (p?.type === "multi_select") {
-      return (p.multi_select || []).map((t) => t.name);
-    }
-  }
+  const { prop } = findPropByName(props, ["태그", "Tags", "tags", "tag"]);
+  if (!prop) return [];
+  if (prop.type === "multi_select") return (prop.multi_select || []).map((t) => t.name);
+  if (prop.type === "select" && prop.select?.name) return [prop.select.name];
   return [];
 }
 
